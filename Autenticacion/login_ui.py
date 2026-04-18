@@ -21,7 +21,7 @@ def iniciar_sesion():
 
 
 def abrir_app(usuario):
-    import Interfaz.app as app
+    import app as app
     app.iniciar(usuario)
 
 

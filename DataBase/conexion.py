@@ -1,4 +1,5 @@
 import mysql.connector
+import mysql.connector.errors   as error
 
 class Conexion:
     def __init__(self):
@@ -16,6 +17,6 @@ class Conexion:
                 database=self.database
             )
             return conexion
-        except mysql.connector.Error as e:
+        except error.Error as e:
             print(f"Error al conectar a la base de datos: {e}")
             return None
