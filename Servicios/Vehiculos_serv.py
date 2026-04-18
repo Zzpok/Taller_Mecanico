@@ -6,17 +6,18 @@ def crear_vehiculo(vehiculo): #CREATE
     cursor = conexion.cursor()
 
     sql = """
-    INSERT INTO vehiculos (marca, modelo, año, placa, id_cliente)
-    VALUES (%s,%s,%s,%s,%s)
+    INSERT INTO vehiculos (marca, modelo, año, color, placa, id_cliente)
+    VALUES (%s,%s,%s,%s,%s,%s)
     """
 
     cursor.execute(sql, (
-        vehiculo.marca,
-        vehiculo.modelo,
-        vehiculo.año,
-        vehiculo.placa,
-        vehiculo.id_cliente
-    ))
+    vehiculo.marca,
+    vehiculo.modelo,
+    vehiculo.año,
+    vehiculo.color,
+    vehiculo.placa,
+    vehiculo.id_cliente
+))
 
     conexion.commit()
     conexion.close()
@@ -30,6 +31,7 @@ def editar_vehiculo(vehiculo):#UPDATE
     SET marca = %s, 
     modelo = %s, 
     año = %s, 
+    color = %s,
     placa = %s, 
     id_cliente = %s
     WHERE id_vehiculo = %s
@@ -39,6 +41,7 @@ def editar_vehiculo(vehiculo):#UPDATE
         vehiculo.marca,
         vehiculo.modelo,
         vehiculo.año,
+        vehiculo.color,
         vehiculo.placa,
         vehiculo.id_cliente,
         vehiculo.id_vehiculo
@@ -46,6 +49,18 @@ def editar_vehiculo(vehiculo):#UPDATE
         
     conexion.commit()
     conexion.close()
+
+def listar_vehiculos():
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+
+    sql = "SELECT * FROM vehiculos"
+
+    cursor.execute(sql)
+    resultados = cursor.fetchall()
+    
+    conexion.close()
+    return resultados
 
 def consultar_vehiculos_placa(placa):#READ
     conexion = Conexion().conectar()

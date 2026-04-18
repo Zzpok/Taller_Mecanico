@@ -41,7 +41,7 @@ def actualizar_mecanico(mecanico):#UPDATE
     sql = """
     UPDATE mecanicos
     SET nombre = %s, 
-    apellido = %s, e
+    apellido = %s, 
     specialidad = %s, 
     disponibilidad = %s, 
     salario = %s

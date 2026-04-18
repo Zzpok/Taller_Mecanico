@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from Interfaz.Frames.clientes_frame import ClientesFrame
+from Interfaz.Frames.vehiculos_frame import VehiculosFrame
+from Interfaz.Frames.mecanicos_frame import MecanicosFrame
 
 SIDEBAR_COLOR  = "#1a1a2e"
 SIDEBAR_HOVER  = "#16213e"
@@ -11,6 +13,8 @@ BG_MAIN        = "#0f0f23"
 
 MENU_ITEMS = [
     ("Clientes", "👤", "clientes"),
+    ("Vehículos", "🚗", "vehiculos"),
+    ("Mecánicos", "🔧", "mecanicos"),
 ]
 
 
@@ -73,6 +77,8 @@ class MainWindow(ctk.CTk):
         self.nav_buttons[section].configure(fg_color=ACCENT_COLOR, text_color="#ffffff")
         frame_map = {
             "clientes": ClientesFrame,
+            "vehiculos": VehiculosFrame,
+            "mecanicos": MecanicosFrame,
         }
         FrameClass = frame_map[section]
         self.current_frame = FrameClass(self.content_area)
