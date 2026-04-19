@@ -2,6 +2,8 @@ import customtkinter as ctk
 from Interfaz.Frames.clientes_frame import ClientesFrame
 from Interfaz.Frames.vehiculos_frame import VehiculosFrame
 from Interfaz.Frames.mecanicos_frame import MecanicosFrame
+from Interfaz.Frames.servicio_frame import ServiciosFrame
+from Interfaz.Frames.repuestos_frame import RepuestosFrame
 
 SIDEBAR_COLOR  = "#1a1a2e"
 SIDEBAR_HOVER  = "#16213e"
@@ -15,6 +17,8 @@ MENU_ITEMS = [
     ("Clientes", "👤", "clientes"),
     ("Vehículos", "🚗", "vehiculos"),
     ("Mecánicos", "🔧", "mecanicos"),
+    ("Servicios", "⚙️", "servicios"),
+    ("Repuestos", "🔩", "repuestos"),
 ]
 
 
@@ -79,6 +83,8 @@ class MainWindow(ctk.CTk):
             "clientes": ClientesFrame,
             "vehiculos": VehiculosFrame,
             "mecanicos": MecanicosFrame,
+            "servicios": ServiciosFrame,
+            "repuestos": RepuestosFrame,
         }
         FrameClass = frame_map[section]
         self.current_frame = FrameClass(self.content_area)

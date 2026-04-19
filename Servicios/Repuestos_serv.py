@@ -1,5 +1,5 @@
-from DataBase import Conexion
-from Componentes.Repuestos import Repuesto
+from DataBase.conexion import Conexion
+from Componentes.Repuestos import Repuestos
 
 def crear_repuesto(repuesto): #CREATE
     conexion = Conexion().conectar()
@@ -76,3 +76,20 @@ def alertar_stock_bajo():
     conexion.close()
 
     return resultados
+
+def listar_repuestos():
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+    sql = "SELECT * FROM repuestos"
+    cursor.execute(sql)
+    resultados = cursor.fetchall()
+    conexion.close()
+    return resultados
+
+def eliminar_repuesto(id_repuesto):
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+    sql = "DELETE FROM repuestos WHERE id_repuesto = %s"
+    cursor.execute(sql, (id_repuesto,))
+    conexion.commit()
+    conexion.close()
