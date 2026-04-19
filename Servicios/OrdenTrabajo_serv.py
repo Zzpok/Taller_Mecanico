@@ -77,3 +77,20 @@ def cambiar_estado(id_orden, estado):
     cursor.execute(sql, (estado, id_orden))
     conexion.commit()
     conexion.close()
+
+def listar_ordenes():
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+    sql = "SELECT * FROM orden_trabajo"
+    cursor.execute(sql)
+    resultados = cursor.fetchall()
+    conexion.close()
+    return resultados
+
+def eliminar_orden(id_orden):
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+    sql = "DELETE FROM orden_trabajo WHERE id_orden = %s"
+    cursor.execute(sql, (id_orden,))
+    conexion.commit()
+    conexion.close()
