@@ -5,6 +5,7 @@ from Interfaz.Frames.mecanicos_frame import MecanicosFrame
 from Interfaz.Frames.servicio_frame import ServiciosFrame
 from Interfaz.Frames.repuestos_frame import RepuestosFrame
 from Interfaz.Frames.ordenes_frame import OrdenesFrame
+from Interfaz.Frames.factura_frame import FacturasFrame
 
 SIDEBAR_COLOR  = "#1a1a2e"
 SIDEBAR_HOVER  = "#16213e"
@@ -21,6 +22,7 @@ MENU_ITEMS = [
     ("Servicios", "⚙️", "servicios"),
     ("Repuestos", "🔩", "repuestos"),
     ("Órdenes", "📋", "ordenes"),
+    ("Facturas", "🧾", "facturas"),
 ]
 
 
@@ -88,6 +90,7 @@ class MainWindow(ctk.CTk):
             "servicios": ServiciosFrame,
             "repuestos": RepuestosFrame,
             "ordenes": OrdenesFrame,
+            "facturas": FacturasFrame,
         }
         FrameClass = frame_map[section]
         self.current_frame = FrameClass(self.content_area)
