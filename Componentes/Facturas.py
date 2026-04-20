@@ -1,5 +1,5 @@
 class Factura:
-    def __init__(self, id_factura, fecha, subtotal, impuestos, total, metodo_pago, id_servicio, id_orden):
+    def __init__(self, id_factura, fecha, subtotal, impuestos, total, metodo_pago, id_orden):
         self.id_factura = id_factura
         self.fecha = fecha
         self.subtotal = subtotal

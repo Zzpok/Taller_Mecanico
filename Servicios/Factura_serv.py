@@ -22,3 +22,24 @@ def crear_factura(factura): #CREATE
 
     conexion.commit()
     conexion.close()
+
+def listar_facturas():
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+
+    sql = "SELECT * FROM facturas"
+    
+    cursor.execute(sql)
+    resultados = cursor.fetchall()
+    
+    conexion.close()
+    
+    return resultados
+
+def eliminar_factura(id_factura):
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+    sql = "DELETE FROM facturas WHERE id_factura = %s"
+    cursor.execute(sql, (id_factura,))
+    conexion.commit()
+    conexion.close()
