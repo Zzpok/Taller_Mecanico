@@ -95,7 +95,7 @@ class FacturaFormModal(ctk.CTkToplevel):
         self.ordenes_map = ordenes_map or {}
         self.callback    = callback
         self.title("Nueva Factura")
-        self.geometry("440x620")
+        self.geometry("440x650")
         self.resizable(False, False)
         self.configure(fg_color="#1a1a2e")
         self.attributes("-topmost", True)
@@ -227,7 +227,7 @@ class FacturaDetalleModal(ctk.CTkToplevel):
         super().__init__(parent)
         self.row = row
         self.title(f"Factura #{row.id_factura}")
-        self.geometry("380x360")
+        self.geometry("380x380")
         self.resizable(False, False)
         self.configure(fg_color="#1a1a2e")
         self.attributes("-topmost", True)

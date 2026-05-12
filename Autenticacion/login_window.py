@@ -17,8 +17,19 @@ class LoginWindow(ctk.CTk):
         self.resizable(False, False)
         self.configure(fg_color=BG_MAIN)
         self.usuario = None
+        self._centrar()
         self._build()
 
+    def _centrar(self):
+        self.update_idletasks()
+        ancho_ventana  = 420
+        alto_ventana   = 500
+        ancho_pantalla = self.winfo_screenwidth()
+        alto_pantalla  = self.winfo_screenheight()
+        x = (ancho_pantalla // 2) - (ancho_ventana // 2)
+        y = (alto_pantalla  // 2) - (alto_ventana  // 2)
+        self.geometry(f"420x500+{x}+{y}")
+    
     def _build(self):
         # Contenedor centrado
         wrap = ctk.CTkFrame(self, fg_color=CARD_COLOR, corner_radius=16)
@@ -96,3 +107,4 @@ class LoginWindow(ctk.CTk):
         # Login exitoso — guardar usuario y cerrar
         self.usuario = usuario
         self.destroy()
+

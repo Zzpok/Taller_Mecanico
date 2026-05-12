@@ -32,3 +32,22 @@ def eliminar_usuario(id_usuario):
     cursor.execute(sql, (id_usuario,))
     conexion.commit()
     conexion.close()
+    
+def editar_usuario(usuario):
+    conexion = Conexion().conectar()
+    cursor = conexion.cursor()
+    sql = """
+    UPDATE usuarios
+    SET username = %s,
+        password = %s,
+        rol      = %s
+    WHERE id_usuario = %s
+    """
+    cursor.execute(sql, (
+        usuario.username,
+        usuario.password,
+        usuario.rol,
+        usuario.id_usuario
+    ))
+    conexion.commit()
+    conexion.close()

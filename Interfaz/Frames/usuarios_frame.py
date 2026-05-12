@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from Servicios.Usuarios_serv import listar_usuarios, crear_usuario, eliminar_usuario
+from Servicios.Usuarios_serv import listar_usuarios, crear_usuario, eliminar_usuario, editar_usuario
 from Componentes.Usuarios import Usuario
 from Interfaz.Frames.base_frame import BaseFrame
 
@@ -25,7 +25,6 @@ class UsuariosFrame(BaseFrame):
     def _load_data(self):
         try:
             resultados = listar_usuarios()
-            # tupla: (id_usuario, username, password, rol)
             self.rows_data = [
                 Usuario(
                     id_usuario = r[0],
@@ -51,8 +50,7 @@ class UsuariosFrame(BaseFrame):
         UsuarioFormModal(self, callback=self._load_data)
 
     def on_edit(self, row):
-        # Los usuarios no se editan, solo se crean o eliminan
-        pass
+        UsuarioFormModal(self, callback=self._load_data, usuario=row)
 
     def on_delete(self, row):
         ConfirmarEliminarDialog(
@@ -70,10 +68,13 @@ class UsuariosFrame(BaseFrame):
 
 
 class UsuarioFormModal(ctk.CTkToplevel):
-    def __init__(self, parent, callback=None):
+    def __init__(self, parent, callback=None, usuario=None):
         super().__init__(parent)
         self.callback = callback
-        self.title("Nuevo Usuario")
+        self.usuario  = usuario                        # None = crear, objeto = editar
+        self.editando = usuario is not None
+
+        self.title("Editar Usuario" if self.editando else "Nuevo Usuario")
         self.geometry("400x480")
         self.resizable(False, False)
         self.configure(fg_color="#1a1a2e")
@@ -87,7 +88,8 @@ class UsuarioFormModal(ctk.CTkToplevel):
         wrap.pack(padx=28, pady=24, fill="both", expand=True)
 
         ctk.CTkLabel(
-            wrap, text="Nuevo Usuario",
+            wrap,
+            text="Editar Usuario" if self.editando else "Nuevo Usuario",
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color=TEXT_PRIMARY,
         ).pack(anchor="w", pady=(0, 18))
@@ -101,11 +103,18 @@ class UsuarioFormModal(ctk.CTkToplevel):
             text_color=TEXT_PRIMARY, placeholder_text_color="#555577",
         )
         self.username_entry.pack(fill="x", pady=(3, 10))
+        if self.editando:
+            self.username_entry.insert(0, self.usuario.username)
 
         # Password
-        ctk.CTkLabel(wrap, text="Contraseña", font=ctk.CTkFont(size=12), text_color=TEXT_SECONDARY).pack(anchor="w")
+        ctk.CTkLabel(
+            wrap,
+            text="Nueva contraseña" if self.editando else "Contraseña",
+            font=ctk.CTkFont(size=12), text_color=TEXT_SECONDARY,
+        ).pack(anchor="w")
         self.password_entry = ctk.CTkEntry(
-            wrap, placeholder_text="Ingresa una contraseña",
+            wrap,
+            placeholder_text="Deja vacío para no cambiarla" if self.editando else "Ingresa una contraseña",
             show="●", height=36, corner_radius=8,
             fg_color="#0f0f23", border_color="#2a2a4a",
             text_color=TEXT_PRIMARY, placeholder_text_color="#555577",
@@ -124,7 +133,7 @@ class UsuarioFormModal(ctk.CTkToplevel):
 
         # Rol
         ctk.CTkLabel(wrap, text="Rol", font=ctk.CTkFont(size=12), text_color=TEXT_SECONDARY).pack(anchor="w")
-        self.rol_var = ctk.StringVar(value=ROLES[0])
+        self.rol_var = ctk.StringVar(value=self.usuario.rol if self.editando else ROLES[0])
         ctk.CTkOptionMenu(
             wrap, values=ROLES, variable=self.rol_var,
             height=36, corner_radius=8,
@@ -146,7 +155,9 @@ class UsuarioFormModal(ctk.CTkToplevel):
         ).grid(row=0, column=0, padx=(0, 6), sticky="ew")
 
         ctk.CTkButton(
-            btn_frame, text="Crear Usuario", height=38, corner_radius=8,
+            btn_frame,
+            text="Guardar Cambios" if self.editando else "Crear Usuario",
+            height=38, corner_radius=8,
             fg_color=ACCENT_COLOR, hover_color=ACCENT_HOVER,
             font=ctk.CTkFont(size=13, weight="bold"),
             command=self._save,
@@ -158,11 +169,18 @@ class UsuarioFormModal(ctk.CTkToplevel):
         password2 = self.password2_entry.get().strip()
         rol       = self.rol_var.get()
 
-        if not username or not password:
-            self.error_label.configure(text="Username y contraseña son obligatorios.")
+        if not username:
+            self.error_label.configure(text="El username es obligatorio.")
             return
 
-        if password != password2:
+        # Si está editando y no escribió contraseña, conserva la anterior
+        if self.editando and not password:
+            password = self.usuario.password
+        elif not password:
+            self.error_label.configure(text="La contraseña es obligatoria.")
+            return
+
+        if password != password2 and not (self.editando and not self.password_entry.get().strip()):
             self.error_label.configure(text="Las contraseñas no coinciden.")
             return
 
@@ -172,12 +190,15 @@ class UsuarioFormModal(ctk.CTkToplevel):
 
         try:
             usuario = Usuario(
-                id_usuario = None,
+                id_usuario = self.usuario.id_usuario if self.editando else None,
                 username   = username,
                 password   = password,
                 rol        = rol,
             )
-            crear_usuario(usuario)
+            if self.editando:
+                editar_usuario(usuario)
+            else:
+                crear_usuario(usuario)
         except Exception as e:
             self.error_label.configure(text=f"Error: {e}")
             return

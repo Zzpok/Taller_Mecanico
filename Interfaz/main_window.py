@@ -58,6 +58,7 @@ class MainWindow(ctk.CTk):
         self.geometry("1280x780")
         self.minsize(1024, 680)
         self.configure(fg_color=BG_MAIN)
+        self.state("zoomed")
 
         self.current_frame  = None
         self.nav_buttons    = {}
